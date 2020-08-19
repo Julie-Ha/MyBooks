@@ -39,6 +39,11 @@ class Book
      */
     private $created_by;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class)
+     */
+    private $updated_by;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -88,6 +93,18 @@ class Book
     public function setCreatedBy(?User $created_by): self
     {
         $this->created_by = $created_by;
+
+        return $this;
+    }
+
+    public function getUpdatedBy(): ?User
+    {
+        return $this->updated_by;
+    }
+
+    public function setUpdatedBy(?User $updated_by): self
+    {
+        $this->updated_by = $updated_by;
 
         return $this;
     }

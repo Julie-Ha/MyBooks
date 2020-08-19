@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 class BooksController extends AbstractController
 {
@@ -24,13 +25,15 @@ class BooksController extends AbstractController
     /**
      * @Route("/books/create", name="app_books_create")
      */
-    public function create(Request $request, EntityManagerInterface $em)
+    public function create(Request $request, EntityManagerInterface $em, Security $security)
     {
     	$book = new Book;
         $form = $this->createForm(BookType::class, $book);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $security->getUser();
+            $book->setCreatedBy($user);
             $em->persist($book);
             $em->flush();
 
