@@ -33,6 +33,12 @@ class Book
      */
     private $genre;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="books")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $created_by;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -70,6 +76,18 @@ class Book
     public function setGenre(string $genre): self
     {
         $this->genre = $genre;
+
+        return $this;
+    }
+
+    public function getCreatedBy(): ?User
+    {
+        return $this->created_by;
+    }
+
+    public function setCreatedBy(?User $created_by): self
+    {
+        $this->created_by = $created_by;
 
         return $this;
     }
