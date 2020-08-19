@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Book;
 use App\Form\BookType;
+use App\Repository\BookRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,9 +15,10 @@ class BooksController extends AbstractController
     /**
      * @Route("/", name="app_home")
      */
-    public function index()
+    public function index(BookRepository $bookRepository)
     {
-        return $this->render('books/index.html.twig');
+        $books = $bookRepository->findAll();
+        return $this->render('books/index.html.twig', compact('books'));
     }
 
     /**

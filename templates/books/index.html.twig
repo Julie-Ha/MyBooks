@@ -5,5 +5,14 @@
 {% block body %}
 	<div class="container">
 		<h1>Mes livres</h1>
+		{% for book in books %}
+			<div class="col-md-4 mb-5">
+				<article>
+					<p>{{ book.title }}</p>
+					<p>{{ book.author }}</p>
+					<p>{{ book.genre }}</p>
+				</article>
+			</div>
+		{% endfor %}
 	</div>
 {% endblock %}
