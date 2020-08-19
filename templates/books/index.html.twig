@@ -3,16 +3,17 @@
 {% block title 'MyBooks' %}
 
 {% block body %}
-	<div class="container">
-		<h1>Mes livres</h1>
-		{% for book in books %}
-			<div class="col-md-4 mb-5">
-				<article>
-					<p>{{ book.title }}</p>
-					<p>{{ book.author }}</p>
-					<p>{{ book.genre }}</p>
+	<div class="container ml-auto mr-auto">
+		<h1>Derniers livres</h1>
+		<div class="d-flex flex-wrap">
+			{% for book in books %}
+				<article class="mr-auto ml-auto">
+					<a class="book-a text-decoration-none text-dark" href="{{ path('app_books_show', {id: book.id}) }}">
+						<img src="{{ (book.imageName ? vich_uploader_asset(book) :  asset('build/images/placeholder.jpg')) | imagine_filter('squared_thumbnail_small') }}" alt="{{ book.title }}"/>
+						<p class="text-center ">{{ book.title|u.truncate(26, '...') }}</p>
+					</a>
 				</article>
-			</div>
-		{% endfor %}
+			{% endfor %}
+		</div>
 	</div>
 {% endblock %}

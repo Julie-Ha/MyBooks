@@ -1,0 +1,23 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title book.title %}
+
+{% block body %}
+
+	<div class="container">
+		<h1>{{ book.title }}</h1>
+		<article>
+			<div class="d-inline-flex">
+				<a href="{{ path('app_books_show', {id: book.id}) }}">
+					<img src="{{ (book.imageName ? vich_uploader_asset(book) :  asset('build/images/placeholder.jpg')) | imagine_filter('squared_thumbnail_small') }}" alt="{{ book.title }}"/>
+				</a>
+				<div class="ml-4">
+					<p><b>Titre:</b> {{ book.title }}</p>
+					<p><b>Auteur:</b> {{ book.author }}</p>
+					<p><b>Genre:</b> {{ book.genre }}</p>
+				<div>
+			</div>
+		</article>
+	</div>
+	
+{% endblock %}

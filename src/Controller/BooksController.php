@@ -8,6 +8,7 @@ use App\Repository\BookRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 
@@ -23,7 +24,7 @@ class BooksController extends AbstractController
     }
 
     /**
-     * @Route("/books/create", name="app_books_create")
+     * @Route("/books/create", name="app_books_create", methods={"GET", "POST"})
      */
     public function create(Request $request, EntityManagerInterface $em, Security $security)
     {
@@ -41,5 +42,13 @@ class BooksController extends AbstractController
         }
 
         return $this->render('books/create.html.twig',['form'=>$form->createView()]);
+    }
+
+    /**
+     * @Route("/books/{id<[0-9]+>}", name="app_books_show", methods={"GET"})
+     */
+    public function show(Book $book): Response
+    {
+        return $this->render('books/show.html.twig', compact('book'));
     }
 }
