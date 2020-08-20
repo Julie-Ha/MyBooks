@@ -15,9 +15,33 @@
 					<p><b>Titre:</b> {{ book.title }}</p>
 					<p><b>Auteur:</b> {{ book.author }}</p>
 					<p><b>Genre:</b> {{ book.genre }}</p>
+					<p class="text-muted"><b>Ajouté par:</b> {{ book.createdBy.username }}</p>
 
-					{% if app.user == book.createdBy %}
-						<div class="mt-auto">
+					<div class="mt-auto">
+					{% if app.user %}
+
+						{% if isInLibrary %}
+
+							<a class="mr-3 btn btn-outline-danger" href="#" onclick="event.preventDefault(); document.getElementById('js-book-remove-form').submit();">Retirer de ma bibliothèque</a>
+
+							<form id="js-book-remove-form" action="{{ path('app_books_remove', {id: book.id}) }}" method="post" style="display:none;">
+								<input type="hidden" name="csrf_token" value="{{ csrf_token('book_remove_' ~ book.id) }}">
+								<input type="hidden" name="_method" value="DELETE">
+							</form>
+
+						{% else %}
+
+							<a class="mr-3 btn btn-outline-info" href="#" onclick="event.preventDefault(); document.getElementById('js-book-add-form').submit();">Ajouter à ma bibliothèque</a>
+
+							<form id="js-book-add-form" action="{{ path('app_books_add', {id: book.id}) }}" method="post" style="display:none;">
+								<input type="hidden" name="csrf_token" value="{{ csrf_token('book_add_' ~ book.id) }}">
+								<input type="hidden" name="_method" value="PUT">
+							</form>
+
+						{% endif %}
+
+						{% if app.user == book.createdBy %}
+
 							<a class="mr-3 btn btn-outline-dark" href="{{ path('app_books_edit', {id: book.id}) }}">Modifier</a>
 							<a class="btn btn-outline-danger" href="#" onclick="event.preventDefault(); confirm('Supprimer?') && document.getElementById('js-book-delete-form').submit();">Supprimer</a>
 
@@ -25,8 +49,12 @@
 								<input type="hidden" name="csrf_token" value="{{ csrf_token('book_deletion_' ~ book.id) }}">
 								<input type="hidden" name="_method" value="DELETE">
 							</form>
-						</div>
+
+						{% endif %}
+
 					{% endif %}
+
+					</div>
 				<div>
 			</div>
 		</article>

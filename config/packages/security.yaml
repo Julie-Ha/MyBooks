@@ -42,3 +42,4 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: '/books/create', roles: ROLE_USER }
+        - { path: '/library', roles: ROLE_USER }
