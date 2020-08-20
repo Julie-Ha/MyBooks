@@ -1,0 +1,12 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title 'Modifier un livre' %}
+
+{% block body %}
+	<div class="row">
+		<div class="col-md-6 mx-auto">
+			<h1>Modification</h1>
+			{{ include('layouts/partials/_form.html.twig', {submitButtonText: 'Modifier'}) }}
+		</div>
+	</div>
+{% endblock %}

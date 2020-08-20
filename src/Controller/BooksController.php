@@ -51,4 +51,46 @@ class BooksController extends AbstractController
     {
         return $this->render('books/show.html.twig', compact('book'));
     }
+
+    /**
+     * @Route("/books/{id<[0-9]+>}/edit", name="app_books_edit", methods={"GET", "PUT"})
+     */
+    public function edit(Book $book, Request $request, EntityManagerInterface $em, Security $security): Response
+    {
+        if ($security->getUser() !== $book->getCreatedBy()) {
+            return $this->redirectToRoute('app_home');
+        }
+
+        $form = $this->createForm(BookType::class, $book, [
+            'method' => 'PUT'
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+
+            $this->addFlash('success', 'Livre mis à jour');
+
+            return $this->redirectToRoute('app_home');
+        }
+
+        return $this->render('books/edit.html.twig', ['form' => $form->createView(), 'book' => $book]);
+    }
+
+    /**
+     * @Route("/books/{id<[0-9]+>}", name="app_books_delete", methods={"DELETE"})
+     */
+    public function delete(Request $request, Book $book, EntityManagerInterface $em): Response
+    {
+        if ($this->isCsrfTokenValid('book_deletion_'.$book->getId(), $request->request->get('csrf_token'))) {
+            $em->remove($book);
+            $em->flush();
+
+            $this->addFlash('info', 'Livre supprimé');
+        }
+       
+
+       return $this->redirectToRoute('app_home');
+    }
 }

@@ -3,3 +3,9 @@
 h1 {
 	@extend .mt-3, .mb-3;
 }
+
+.book-a img {
+	&:hover {
+		transform: scale(1.025);
+	}
+}

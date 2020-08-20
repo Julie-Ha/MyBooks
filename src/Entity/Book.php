@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Entity\Traits\Timestampable;
 use App\Repository\BookRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -60,12 +62,12 @@ class Book
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="books")
      * @ORM\JoinColumn(nullable=true)
      */
-    private $created_by;
+    private $createdBy;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class)
-     */
-    private $updated_by;
+    public function __construct()
+    {
+        
+    }
 
 
     public function getId(): ?int
@@ -146,24 +148,12 @@ class Book
 
     public function getCreatedBy(): ?User
     {
-        return $this->created_by;
+        return $this->createdBy;
     }
 
-    public function setCreatedBy(?User $created_by): self
+    public function setCreatedBy(?User $createdBy): self
     {
-        $this->created_by = $created_by;
-
-        return $this;
-    }
-
-    public function getUpdatedBy(): ?User
-    {
-        return $this->updated_by;
-    }
-
-    public function setUpdatedBy(?User $updated_by): self
-    {
-        $this->updated_by = $updated_by;
+        $this->createdBy = $createdBy;
 
         return $this;
     }
