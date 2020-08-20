@@ -144,4 +144,17 @@ class BooksController extends AbstractController
 
         return $this->redirect($this->generateUrl('app_books_show', ['id' => $book->getId()]));
     }
+
+    /**
+     * @Route("/books/search", name="app_books_search", methods={"GET", "POST"})
+     */
+    public function search(Request $request, BookRepository $bookRepository, EntityManagerInterface $em): Response
+    {
+        $data = $request->request->all();
+
+        $books = $bookRepository->findBooksBySearch($data['search']);
+
+        $title = 'Résultats de la recherche "'.$data['search'].'"';
+        return $this->render('books/index.html.twig', compact('title', 'books'));
+    }
 }
