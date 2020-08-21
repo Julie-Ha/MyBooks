@@ -146,6 +146,16 @@ class BooksController extends AbstractController
     }
 
     /**
+     * @Route("/books/{id<[0-9]+>}/isread", name="app_books_isread", methods={"PUT"})
+     */
+    public function isRead(Book $book, Request $request, EntityManagerInterface $em, Security $security): Response
+    {
+        
+
+        return $this->redirect($this->generateUrl('app_books_show', ['id' => $book->getId()]));
+    }
+
+    /**
      * @Route("/books/search", name="app_books_search", methods={"GET", "POST"})
      */
     public function search(Request $request, BookRepository $bookRepository, EntityManagerInterface $em): Response
