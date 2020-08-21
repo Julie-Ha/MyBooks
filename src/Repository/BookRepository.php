@@ -23,6 +23,7 @@ class BookRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('b')
             ->andWhere('b.title LIKE :search')
+            ->orWhere('b.author LIKE :search')
             ->setParameter('search', '%'.$search.'%')
             ->getQuery()
             ->getResult()
