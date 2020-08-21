@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ORM\Table(name="user")
+ * @ORM\Table(name="users")
  * @UniqueEntity(fields={"username"}, message="There is already an account with this username")
  * @ORM\HasLifecycleCallbacks
  */
@@ -49,13 +49,14 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\OneToMany(targetEntity=UserBook::class, mappedBy="user", orphanRemoval=true)
+     * @ORM\ManyToMany(targetEntity=Book::class)
      */
-    private $userbooks;
+    private $books;
+
 
     public function __construct()
     {
-        $this->userbooks = new ArrayCollection();
+        $this->books = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -148,36 +149,26 @@ class User implements UserInterface
      */
     public function getBooks(): Collection
     {
-        $books = new ArrayCollection();
-        
-        foreach ($userbooks as $userbook) {
-            $books[] = $userbook->getBook();
-        }
+        return $this->books;
     }
 
-    public function addBook(UserBook $book): self
+    public function addBook(Book $book): self
     {
         if (!$this->books->contains($book)) {
             $this->books[] = $book;
-            $book->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeBook(UserBook $book): self
+    public function removeBook(Book $book): self
     {
         if ($this->books->contains($book)) {
             $this->books->removeElement($book);
-            // set the owning side to null (unless already changed)
-            if ($book->getUser() === $this) {
-                $book->setUser(null);
-            }
         }
 
         return $this;
     }
-
 
 
 }
