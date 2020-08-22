@@ -1,5 +1,9 @@
 @import "~bootstrap/scss/bootstrap";
 
+* {
+	font-family: Arial;
+}
+
 h1 {
 	@extend .mt-3, .mb-3;
 }
@@ -9,3 +13,5 @@ h1 {
 		transform: scale(1.025);
 	}
 }
+
+
