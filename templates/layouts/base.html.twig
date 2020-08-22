@@ -11,7 +11,11 @@
     <body>
 
     	{{ include('layouts/partials/_nav.html.twig') }}
-        {% block body %}{% endblock %}
+
+        <main role="main" class="container">
+            {{ include('layouts/partials/_flash_message.html.twig') }}
+            {% block body %}{% endblock %}
+        </main>
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
