@@ -15,6 +15,14 @@ use Symfony\Component\Security\Core\Security;
 class BooksController extends AbstractController
 {
     /**
+     * @Route("/api/getBooks/{offset?}")
+     */
+    public function getBooks(BookRepository $bookRepository, $offset) {
+        return $this->json(['books' => $bookRepository->getBooks($offset),
+                            'total' => $bookRepository->getCountBooks()]);
+    }
+
+    /**
      * @Route("/", name="app_home")
      */
     public function index(BookRepository $bookRepository)

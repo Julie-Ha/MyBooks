@@ -30,6 +30,26 @@ class BookRepository extends ServiceEntityRepository
         ;
     }
 
+    public function getBooks(?int $offset = 0, int $limit = 5) {
+        $qb = $this->createQueryBuilder('p');
+        $qb->select()
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+        ;
+
+        return $qb->getQuery()->getArrayResult();
+    }
+
+    public function getCountBooks() {
+        $qb = $this->createQueryBuilder('p');
+        $qb->select(
+            $qb->expr()->count('p.id')
+        )
+        ;
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
     // /**
     //  * @return Book[] Returns an array of Book objects
     //  */

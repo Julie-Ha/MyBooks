@@ -4,7 +4,7 @@
 
 {% block body %}
 	<div class="container ml-auto mr-auto">
-		<h1>{{ title }}</h1>
+		{#<h1>{{ title }}</h1>
 		<div class="d-flex flex-wrap">
 			{% for book in books %}
 				<article class="mr-auto ml-auto">
@@ -14,6 +14,8 @@
 					</a>
 				</article>
 			{% endfor %}
-		</div>
+		</div>#}
+
+		<div id="books"></div>
 	</div>
 {% endblock %}

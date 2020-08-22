@@ -1,6 +1,8 @@
 {
     "devDependencies": {
+        "@babel/plugin-proposal-object-rest-spread": "^7.11.0",
         "@symfony/webpack-encore": "^0.30.0",
+        "@vue/component-compiler-utils": "^3.2.0",
         "bootstrap": "^4.5.2",
         "core-js": "^3.0.0",
         "jquery": "^3.5.1",
@@ -18,5 +20,10 @@
         "watch": "encore dev --watch",
         "build": "encore production --progress"
     },
-    "dependencies": {}
+    "dependencies": {
+        "axios": "^0.20.0",
+        "vue": "2.5",
+        "vue-loader": "15",
+        "vue-template-compiler": "2.5"
+    }
 }
