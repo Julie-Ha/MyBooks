@@ -12,3 +12,9 @@ import '../scss/app.scss';
 // import $ from 'jquery';
 import $ from 'jquery';
 import 'bootstrap';
+
+//Affiche le nom de l'image dans le champ à gauche du bouton browse (ce n'est pas le cas par défaut)
+$('.custom-file-input').on('change', function(e) {
+	var inputFile = e.currentTarget;
+	$(inputFile).parent().find('.custom-file-label').html(inputFile.files[0].name);
+})
