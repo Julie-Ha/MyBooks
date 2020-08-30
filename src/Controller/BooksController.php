@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Book;
+use App\Entity\UserBook;
 use App\Form\BookType;
 use App\Repository\BookRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
+use App\Repository\UserBookRepository;
 
 class BooksController extends AbstractController
 {
@@ -56,12 +58,12 @@ class BooksController extends AbstractController
     /**
      * @Route("/books/{id<[0-9]+>}", name="app_books_show", methods={"GET"})
      */
-    public function show(Book $book, Security $security): Response
+    public function show(Book $book, Security $security, UserBookRepository $userBookRepository): Response
     {   
         $isInLibrary = false;
 
         if ($security->getUser()) {
-            if ($security->getUser()->getBooks()->contains($book)) {
+            if ($userBookRepository->findUserBook($security->getUser(), $book)) {
                 $isInLibrary = true;
             }
         }
@@ -125,7 +127,11 @@ class BooksController extends AbstractController
         }
 
         if ($this->isCsrfTokenValid('book_add_'.$book->getId(), $request->request->get('csrf_token'))) {
-            $security->getUser()->addBook($book);
+            $user_book = new UserBook();
+            $user_book->setUser($security->getUser());
+            $user_book->setBook($book);
+            $user_book->setIsRead(false);
+            $em->persist($user_book);
             $em->flush();
 
             $this->addFlash('info', 'Livre ajouté');
@@ -137,14 +143,15 @@ class BooksController extends AbstractController
     /**
      * @Route("/books/{id<[0-9]+>}/remove", name="app_books_remove", methods={"DELETE"})
      */
-    public function remove(Book $book, Request $request, EntityManagerInterface $em, Security $security): Response
+    public function remove(Book $book, Request $request, EntityManagerInterface $em, Security $security, UserBookRepository $userBookRepository): Response
     {
         if (!$security->getUser()) {
             return $this->redirectToRoute('app_login');
         }
 
         if ($this->isCsrfTokenValid('book_remove_'.$book->getId(), $request->request->get('csrf_token'))) {
-            $security->getUser()->removeBook($book);
+            $userBook = $userBookRepository->findUserBook($security->getUser(), $book)[0];
+            $em->remove($userBook);
             $em->flush();
 
             $this->addFlash('info', 'Livre retiré');

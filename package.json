@@ -20,10 +20,5 @@
         "watch": "encore dev --watch",
         "build": "encore production --progress"
     },
-    "dependencies": {
-        "axios": "^0.20.0",
-        "vue": "2.5",
-        "vue-loader": "15",
-        "vue-template-compiler": "2.5"
-    }
+    "dependencies": {}
 }

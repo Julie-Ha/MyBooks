@@ -13,11 +13,6 @@ import '../scss/app.scss';
 import $ from 'jquery';
 import 'bootstrap';
 
-import Vue from 'vue'
-import Books from './components/Books.vue'
-
-new Vue({ render: h => h(Books) }).$mount('#books')
-
 //Affiche le nom de l'image dans le champ à gauche du bouton browse (ce n'est pas le cas par défaut)
 $('.custom-file-input').on('change', function(e) {
 	var inputFile = e.currentTarget;

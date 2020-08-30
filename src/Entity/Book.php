@@ -64,6 +64,7 @@ class Book
      */
     private $createdBy;
 
+
     public function getId(): ?int
     {
         return $this->id;

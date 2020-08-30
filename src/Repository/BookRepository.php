@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Book;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Repository\UserBookRepository;
 
 /**
  * @method Book|null find($id, $lockMode = null, $lockVersion = null)
@@ -48,6 +49,18 @@ class BookRepository extends ServiceEntityRepository
         ;
 
         return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function findBooksByUser($user, $userBookRepository) {
+        $userBooks = $userBookRepository->findByUser($user->getId());
+        dd($userBooks);
+        $books = [];
+
+        foreach($userBooks as $userBook) {
+            $book[] = $userBook->getBook();
+        }
+
+        return $books;
     }
 
     // /**
