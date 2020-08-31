@@ -57,7 +57,7 @@ Encore
     .enableSassLoader()
 
     //Vue.js
-    .enableVueLoader()
+    //.enableVueLoader()
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()

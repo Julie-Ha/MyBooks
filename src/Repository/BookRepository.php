@@ -51,18 +51,6 @@ class BookRepository extends ServiceEntityRepository
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function findBooksByUser($user, $userBookRepository) {
-        $userBooks = $userBookRepository->findByUser($user->getId());
-        dd($userBooks);
-        $books = [];
-
-        foreach($userBooks as $userBook) {
-            $book[] = $userBook->getBook();
-        }
-
-        return $books;
-    }
-
     // /**
     //  * @return Book[] Returns an array of Book objects
     //  */

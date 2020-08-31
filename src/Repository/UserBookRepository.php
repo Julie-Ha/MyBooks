@@ -30,6 +30,16 @@ class UserBookRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findUserBooks($user) 
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.user = :user_id')
+            ->setParameter('user_id', $user->getId())
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return UserBook[] Returns an array of UserBook objects
     //  */

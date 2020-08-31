@@ -10,8 +10,8 @@
 
       
         <form class="form-inline my-2 my-lg-0" method="post" action="{{ path('app_books_search') }}">
-          <input class="form-control mr-sm-2" type="search" name="search" id="search" placeholder="search" aria-label="search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+          <input class="form-control mr-sm-2" type="search" name="search" id="search" aria-label="search">
+          <button class="search-button btn btn-outline-success my-2 my-sm-0" type="submit">
             <i class="fa fa-search"></i>
           </button>
         </form>
@@ -22,7 +22,7 @@
           {% if app.user %}
 
             <li class="nav-item">
-              <a class="nav-link" href="{{ path('app_library') }}">Ma bibliothèque</a>
+              <a class="nav-link" href="{{ path('app_library_books') }}">Ma bibliothèque</a>
             </li>
 
             <li class="nav-item">

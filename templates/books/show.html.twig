@@ -15,16 +15,53 @@
 					<p><b>Titre:</b> {{ book.title }}</p>
 					<p><b>Auteur:</b> {{ book.author }}</p>
 					<p><b>Genre:</b> {{ book.genre }}</p>
-					<p class="text-muted"><b>Ajouté par:</b> {{ book.createdBy.username }}</p>
+					<p><b>Ajouté par:</b> {{ book.createdBy.username }}</p>
 
 					<div class="mt-auto">
 					{% if app.user %}
 
 						{% if isInLibrary %}
 
+							<div class="mb-3">
+
+							{% if isRead %}
+
+                <div class="mb-3" id="readingDate">
+                {% if readingDate %}
+                  <p class="text-muted"><b>Lu le: {{ readingDate }}</b></p>
+                {% else %}
+                  <button class="mr-3 btn btn-outline-info" href="#" onclick="event.target.style.display = 'none'; document.getElementById('js-readingdate-form').style.display = 'block'">Ajouter une date de lecture</button>
+
+                  <form id="js-readingdate-form" action="{{ path('app_library_readingdate', {id: book.id}) }}" method="post" style="display:none;">
+                    <input type="date">
+                    <a class="mr-3 btn btn-outline-info" href="#" onclick="event.preventDefault(); document.getElementById('js-readingdate-form').submit();">Valider</a>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token('book_readingdate_' ~ book.id) }}">
+                    <input type="hidden" name="_method" value="PUT">
+                  </form>
+                {% endif %}	
+                </div>
+
+                <a class="mr-3 btn btn-outline-danger" href="#" onclick="event.preventDefault(); document.getElementById('js-book-notread-form').submit();">Je n'ai pas lu ce livre</a>
+
+                <form id="js-book-notread-form" action="{{ path('app_library_notread', {id: book.id}) }}" method="post" style="display:none;">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token('book_notread_' ~ book.id) }}">
+                  <input type="hidden" name="_method" value="DELETE">
+                </form>
+							{% else %}
+                <a class="mr-3 btn btn-outline-info" href="#" onclick="event.preventDefault(); document.getElementById('js-book-read-form').submit();">J'ai lu ce livre</a>
+
+                <form id="js-book-read-form" action="{{ path('app_library_read', {id: book.id}) }}" method="post" style="display:none;">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token('book_read_' ~ book.id) }}">
+                  <input type="hidden" name="_method" value="PUT">
+                </form>
+							{% endif %}	
+
+							</div>
+							
+              <div class="mb-3">
 							<a class="mr-3 btn btn-outline-danger" href="#" onclick="event.preventDefault(); document.getElementById('js-book-remove-form').submit();">Retirer de ma bibliothèque</a>
 
-							<form id="js-book-remove-form" action="{{ path('app_books_remove', {id: book.id}) }}" method="post" style="display:none;">
+							<form id="js-book-remove-form" action="{{ path('app_library_remove', {id: book.id}) }}" method="post" style="display:none;">
 								<input type="hidden" name="csrf_token" value="{{ csrf_token('book_remove_' ~ book.id) }}">
 								<input type="hidden" name="_method" value="DELETE">
 							</form>
@@ -33,12 +70,13 @@
 
 							<a class="mr-3 btn btn-outline-info" href="#" onclick="event.preventDefault(); document.getElementById('js-book-add-form').submit();">Ajouter à ma bibliothèque</a>
 
-							<form id="js-book-add-form" action="{{ path('app_books_add', {id: book.id}) }}" method="post" style="display:none;">
+							<form id="js-book-add-form" action="{{ path('app_library_add', {id: book.id}) }}" method="post" style="display:none;">
 								<input type="hidden" name="csrf_token" value="{{ csrf_token('book_add_' ~ book.id) }}">
 								<input type="hidden" name="_method" value="PUT">
 							</form>
 
 						{% endif %}
+            </div>
 
 						{% if app.user == book.createdBy %}
 

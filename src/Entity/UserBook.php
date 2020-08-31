@@ -34,6 +34,11 @@ class UserBook
      */
     private $isRead;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $readAt;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -71,6 +76,18 @@ class UserBook
     public function setIsRead(bool $isRead): self
     {
         $this->isRead = $isRead;
+
+        return $this;
+    }
+
+    public function getReadAt(): ?\DateTimeInterface
+    {
+        return $this->readAt;
+    }
+
+    public function setReadAt(?\DateTimeInterface $readAt): self
+    {
+        $this->readAt = $readAt;
 
         return $this;
     }

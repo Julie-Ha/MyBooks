@@ -9,7 +9,6 @@ use App\Repository\BookRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use App\Repository\UserBookRepository;
@@ -58,23 +57,29 @@ class BooksController extends AbstractController
     /**
      * @Route("/books/{id<[0-9]+>}", name="app_books_show", methods={"GET"})
      */
-    public function show(Book $book, Security $security, UserBookRepository $userBookRepository): Response
+    public function show(Book $book, Security $security, UserBookRepository $userBookRepository)
     {   
         $isInLibrary = false;
+        $isRead = false;
+        $readingDate = null;
 
         if ($security->getUser()) {
-            if ($userBookRepository->findUserBook($security->getUser(), $book)) {
+            $userBook = $userBookRepository->findUserBook($security->getUser(), $book);
+
+            if ($userBook) {
+                $userBook = $userBook[0];
                 $isInLibrary = true;
+                $isRead = $userBook->getIsRead();
             }
         }
 
-        return $this->render('books/show.html.twig', compact('book', 'isInLibrary'));
+        return $this->render('books/show.html.twig', compact('book', 'isInLibrary', 'isRead', 'readingDate'));
     }
 
     /**
      * @Route("/books/{id<[0-9]+>}/edit", name="app_books_edit", methods={"GET", "PUT"})
      */
-    public function edit(Book $book, Request $request, EntityManagerInterface $em, Security $security): Response
+    public function edit(Book $book, Request $request, EntityManagerInterface $em, Security $security)
     {
         if ($security->getUser() !== $book->getCreatedBy()) {
             return $this->redirectToRoute('app_home');
@@ -100,7 +105,7 @@ class BooksController extends AbstractController
     /**
      * @Route("/books/{id<[0-9]+>}", name="app_books_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Book $book, EntityManagerInterface $em, Security $security): Response
+    public function delete(Request $request, Book $book, EntityManagerInterface $em, Security $security)
     {
         if ($security->getUser() !== $book->getCreatedBy()) {
             return $this->redirectToRoute('app_home');
@@ -118,52 +123,9 @@ class BooksController extends AbstractController
     }
 
     /**
-     * @Route("/books/{id<[0-9]+>}/add", name="app_books_add", methods={"PUT"})
-     */
-    public function add(Book $book, Request $request, EntityManagerInterface $em, Security $security): Response
-    {
-        if (!$security->getUser()) {
-            return $this->redirectToRoute('app_login');
-        }
-
-        if ($this->isCsrfTokenValid('book_add_'.$book->getId(), $request->request->get('csrf_token'))) {
-            $user_book = new UserBook();
-            $user_book->setUser($security->getUser());
-            $user_book->setBook($book);
-            $user_book->setIsRead(false);
-            $em->persist($user_book);
-            $em->flush();
-
-            $this->addFlash('info', 'Livre ajouté');
-        }
-
-        return $this->redirect($this->generateUrl('app_books_show', ['id' => $book->getId()]));
-    }
-
-    /**
-     * @Route("/books/{id<[0-9]+>}/remove", name="app_books_remove", methods={"DELETE"})
-     */
-    public function remove(Book $book, Request $request, EntityManagerInterface $em, Security $security, UserBookRepository $userBookRepository): Response
-    {
-        if (!$security->getUser()) {
-            return $this->redirectToRoute('app_login');
-        }
-
-        if ($this->isCsrfTokenValid('book_remove_'.$book->getId(), $request->request->get('csrf_token'))) {
-            $userBook = $userBookRepository->findUserBook($security->getUser(), $book)[0];
-            $em->remove($userBook);
-            $em->flush();
-
-            $this->addFlash('info', 'Livre retiré');
-        }
-
-        return $this->redirect($this->generateUrl('app_books_show', ['id' => $book->getId()]));
-    }
-
-    /**
      * @Route("/books/search", name="app_books_search", methods={"GET", "POST"})
      */
-    public function search(Request $request, BookRepository $bookRepository, EntityManagerInterface $em): Response
+    public function search(Request $request, BookRepository $bookRepository, EntityManagerInterface $em)
     {
         $data = $request->request->all();
 
