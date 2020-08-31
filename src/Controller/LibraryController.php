@@ -105,6 +105,7 @@ class LibraryController extends AbstractController
         if ($this->isCsrfTokenValid('book_notread_'.$book->getId(), $request->request->get('csrf_token'))) {
             $userBook = $userBookRepository->findUserBook($security->getUser(), $book)[0];
             $userBook->setIsRead(false);
+            $userBook->setReadAt(null);
             $em->flush();
 
             $this->addFlash('info', 'Livre marqué comme non lu');
@@ -114,7 +115,7 @@ class LibraryController extends AbstractController
     }
 
     /**
-     * @Route("/library/books/{id<[0-9]+>}/notread", name="app_library_readingdate", methods={"PUT"})
+     * @Route("/library/books/{id<[0-9]+>}/addDate", name="app_library_readingdate", methods={"PUT"})
      */
     public function addReadingDate(Book $book, Request $request, EntityManagerInterface $em, Security $security, UserBookRepository $userBookRepository)
     {
@@ -122,9 +123,10 @@ class LibraryController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        if ($this->isCsrfTokenValid('book_notread_'.$book->getId(), $request->request->get('csrf_token'))) {
+        if ($this->isCsrfTokenValid('book_readingdate_'.$book->getId(), $request->request->get('csrf_token'))) {
+            $date = new \DateTime($request->request->get('reading_date'));
             $userBook = $userBookRepository->findUserBook($security->getUser(), $book)[0];
-            $userBook->setIsRead(false);
+            $userBook->setReadAt($date);
             $em->flush();
 
             $this->addFlash('info', 'Livre marqué comme non lu');

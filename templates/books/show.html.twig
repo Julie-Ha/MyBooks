@@ -33,7 +33,7 @@
                   <button class="mr-3 btn btn-outline-info" href="#" onclick="event.target.style.display = 'none'; document.getElementById('js-readingdate-form').style.display = 'block'">Ajouter une date de lecture</button>
 
                   <form id="js-readingdate-form" action="{{ path('app_library_readingdate', {id: book.id}) }}" method="post" style="display:none;">
-                    <input type="date">
+                    <input type="date" name="reading_date">
                     <a class="mr-3 btn btn-outline-info" href="#" onclick="event.preventDefault(); document.getElementById('js-readingdate-form').submit();">Valider</a>
                     <input type="hidden" name="csrf_token" value="{{ csrf_token('book_readingdate_' ~ book.id) }}">
                     <input type="hidden" name="_method" value="PUT">

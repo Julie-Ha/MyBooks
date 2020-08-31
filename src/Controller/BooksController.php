@@ -70,6 +70,11 @@ class BooksController extends AbstractController
                 $userBook = $userBook[0];
                 $isInLibrary = true;
                 $isRead = $userBook->getIsRead();
+                $readingDate = $userBook->getReadAt();
+                
+                if($readingDate) {
+                    $readingDate = $readingDate->format('d/m/Y');
+                }
             }
         }
 
